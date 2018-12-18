@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout::site-head">
+        <title>Edit Post | Codegum Blog</title>
+    </head>
+
+    <body>
+        <header th:replace="layout::site-header"></header>
+        
+        <h2>Edit Post</h2>
+
+        <div class="container row">
+            <!-- If may nagpost ng form, punta kang /posts/create path -->
+            <!-- Saksak mo dun sa controller yung post na nanggaling dito sa form using POST, alam na ni PostsController yun -->
+            <form action="#" th:action="@{/posts/create}" th:object="${post}" method="POST" class="form col-md-5 col-md-offset-7">
+
+                    <!--  If walang errors, magkakalaman si successMessage object. -->
+                    <!-- this div checks kung may laman si success message. gagawing alert-success yung box if meron. -->
+                    <!-- th:text is irretrieve kung ano ung nilagay na message ni successMessage object na nilagay sa controller. -->
+                    <div class="form-group">
+                        <div th:class="${successMessage} ? 'alert alert-success' : ''" th:text="${successMessage}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Title</label>
+                        <!-- kukunin nya yung "title" na nandun sa PostsController na bindingResult. it also means depende dun sa Controller, -->
+                        <!-- in this case pag walang laman, lalabas yung  -->
+                        <!-- "Title cannot be empty" na message. -->
+                        <!-- Dahil sa controller yun. -->
+
+                        <!-- th:class means kung may error gagawin nyang is-invalid ung class from bootstrap. -->
+                        <input type="text" th:field="*{title}" th:class="${#fields.hasErrors('title') ? 'form-control is-invalid' : 'form-control'}">
+
+                        <!-- dito lalabas sa div na may "th:errors" yung errors KUNG MERON. tingin ko partner sila ni th:field kasi dun ata sya aasa eh.-->
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback"></div>
+                    </div> <!-- Post Title -->
+
+                    <div class="form-group">
+                        <label>Body / Content</label>
+                        <textarea rows="5" cols="" th:field="*{body}" th:class="${#fields.hasErrors('body') ? 'form-control is-invalid' : 'form-control'}"></textarea>
+                        <div th:if="${#fields.hasErrors('body')}" th:errors="*{body}" class="invalid-feedback"></div>
+				        <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="invalid-feedback"></div>
+                    </div> <!-- Post Content / Body -->
+
+                    <div class="form-group clearfix">
+                        <button type="submit" class="btn btn-primary float-right">Create Post</button>
+                    </div> <!-- Submit Button -->
+            </form>
+        </div>
+
+        <footer th:replace="layout::site-footer"></footer>
+    </body>
+</html>

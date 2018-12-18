@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout::site-head">
+        <title>Edit Post</title>
+    </head>
+
+    <body>
+        <header th:replace="layout::site-header"></header>
+
+        <h2>Codegum Blog | Edit Post</h2>
+
+        <div class="container row">
+            <!-- pag cinlick ung submit, yung th:action mapupunta sa controller na nghahandle ng posts/edit  -->
+            <!-- tapos isasaksak dun ung ${post} na object. -->
+            <!-- Tamang tama kasi sinadya natin si Controller na tumanggap ng Post na object. -->
+            <form action="#" th:action="@{/posts/edit}" th:object="${post}" method="POST" class="form col-md-5 col-md-offset-7">
+                <div class="form-group">
+                    <div th:class="${successMessage} ? 'alert alert-success' : ''" th:text="${successMessage}"></div>
+                </div> <!-- Success Message! -->
+
+                <div class="form-group">
+                    <label>Title</label>
+
+                    <!-- Yung field na id, galing yun dun sa Post object. -->
+                    <!-- Kaya may @Valid dun sa Controller -->
+                    <!-- is dahil tumatanggap lang yung Post object argument na yun -->
+                    <!-- na kung anong fields ni Post object sa loob. -->
+                    <!-- so pag gagawa ka ng form ng isang object for ex. Post -->
+                    <!-- yung mga fields dapat katulad siya nung nsa Post model niya. -->
+                    <!--  kung hindi, ayun magkakaerror.  -->
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{author}">
+
+                    <input type="text" th:field="*{title}" th:class="${#fields.hasErrors('title') ? 'form-control is-invalid' : 'form-control'}">
+
+                    <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback"></div> <!-- If may errors upon POSTING dito lalabas. Yung message galing sa Controller. -->
+                </div> <!-- Post Title -->
+
+                <div class="form-group">
+                    <textarea cols="20" rows="15" th:field="*{body}" th:class="${#fields.hasErrors('body') ? 'form-control is-invalid' : 'form-control'}"></textarea>
+
+                    <div th:if="${#fields.hasErrors('body')}" th:errors="*{body}" class="invalid-feedback"></div>
+                </div> <!-- Post Body / Content -->
+
+                <div class="form-group clearfix">
+                    <button type="submit" class="btn btn-primary float-right">Update Post</button>
+                </div> <!-- Submit button -->
+            </form>
+        </div> <!-- Main Container -->
+
+        <footer th:replace="layout :: site-footer"></footer>
+    </body>
+</html>

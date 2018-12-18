@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout::site-head">
+        <title>Codegum Blog Posts</title>
+    </head>
+
+    <body>
+        <header th:replace="layout::site-header"></header>
+
+        <div class="container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Date Created</th>
+                        <th>Author ID</th>
+                        <th class="text-center" sec:authorize="hasAuthority('ADMIN')">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Iterate every post using foreach. -->
+                    <!-- Galing to sa PostsController na may /posts na URL mapping -->
+                    <tr th:each="post : ${posts}">
+                        <!-- yung id ng post ioverwrite dito. -->
+                        <td th:text="${post.id}">ID of Post Here</td>
+                        <td th:text="${post.title}">Title of Post Here</td>
+                        <td th:text="${post.body}">Body / Content of Post Here</td>
+                        <td th:text="${#dates.format(post.date, 'dd-MMM-yyyy')}">Date of Post here (formatted by #dates.format of thymeleaf)</td>
+                        <td>
+                            <span th:if="${post.author}" th:remove="tag">
+                                <i>by</i>
+                                <span th:text="${post.author.fullName != null ? post.author.fullName : post.author.username}">Default Author</span>
+                            </span>
+                        </td>
+                        <td class="text-center" sec:authorize="hasAuthority('ADMIN')">
+                            <a href="#" th:href="@{/posts/edit/{id}/(id=${post.id})}">
+                                <span class="fa fa-edit"></span>
+                            </a>
+
+                            <a href="#" role="button" data-toggle="modal" data-target="#deletePostModal">
+                                <span class="fa fa-trash"></span>
+                            </a>
+
+                            <div class="modal fade" id="deletePostModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">
+                                                <span class="fa fa-trash"></span>
+                                                &nbsp; Confirm Delete
+                                            </h4> <!-- Confirm Delete Title -->
+                                        </div> <!-- Modal Header -->
+                    
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this post?</p>
+                                        </div>
+                    
+                                        <div class="modal-footer">
+                                            <a th:href="@{'/posts/delete/'+${post.id}}">
+                                                <button type="button" class="btn btn-danger">Delete</button>
+                                            </a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- Modal -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table> <!-- Table -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="pagination justify-content-center">
+                        <!-- Di ko pa alam san galing ung posts.number -->
+                        <!-- Pero basta pag 0, wag mo papapindot. bootstrap na bahala dun sa class na yun. -->
+                        <li th:class="${posts.number eq 0} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link" th:if="${not posts.first}" th:href="@{${'/posts'}(page=${posts.number - 1})}">
+                                &laquo;
+                            </a>
+
+                            <a href="#" class="page-link" th:if="${posts.first}">
+                                &laquo;
+                            </a>
+                        </li>
+
+                        <!-- Para dun sa 1-10 -->
+                        <li th:each="pageNo : ${#numbers.sequence(0, posts.totalPages - 1)}" th:class="${posts.number eq pageNo} ? 'page-item active' : 'page-item'">
+                            <a class="page-link" th:if="${not (posts.number eq pageNo)}" th:href="@{${'/posts'}}">
+
+                            </a>
+                        </li>
+
+                        <li>
+
+                        </li>
+                    </ul> <!-- Pagination -->
+                </div> <!-- col-md-12 -->
+            </div> <!-- Row (Pagination) -->
+        </div> <!-- Main Container -->
+
+
+        
+
+        <footer th:replace="layout::site-footer"></footer>
+    </body>
+</html>

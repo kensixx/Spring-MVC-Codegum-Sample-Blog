@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout :: site-head">
+        <title>Login</title>
+    </head>
+
+    <body>
+        <header th:replace="layout :: site-header"></header>
+
+        <h1>Login | Codegum Blog</h1>
+
+        <div class="container row">
+            <!-- th:action means -->
+            <!-- pag form siya, kung saang path sya na nalagay, pupunta dun magpprocess na controller. -->
+            <form method="POST" th:action="@{/users/login}" class="form col-md-5 col-md-offset-7">
+                <!-- If may errors.. lalabas tong div na to. -->
+                <div class="form-group alert alert-danger" th:if="${param.error}">
+                        Invalid username or password!
+                    </div> <!-- Error message -->
+
+                <div class="form-group">
+                    <label for="username">User Name</label>
+                    <input type="text" id="username" name="username" class="form-control">
+                </div> <!-- User name -->
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="passwordHash" id="passwordHash" class="form-control" />
+                </div> <!-- Password -->
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary pull-right" >Login</button>
+
+                    <a href="register.html" th:href="@{/users/register}">[Go to Register]</a>
+                </div> <!-- Submit button -->
+            </form>
+        </div>
+
+        <footer th:replace="layout :: site-footer" />
+    </body>
+</html>

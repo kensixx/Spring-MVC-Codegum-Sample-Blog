@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout::site-head">
+        User List | Codegum Blog
+    </head>
+
+    <body>
+        <header th:replace="layout::site-header"></header>
+
+        <div class="container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Full Name</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr th:each="user : ${userList}">
+                        <td th:text="${user.id}">User ID</td>
+                        <td th:text="${user.username}">User Name</td>
+                        <td th:text="${user.fullName}">Full Name</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> <!-- Main Container -->
+        
+    </body>
+</html>

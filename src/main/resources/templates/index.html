@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- indicates that this file is not pure HTML -->
+<!-- but is a Thymeleaf template that should be processed at the server side to produce a HTML page. -->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout :: site-head">
+        <title>Codegum Blog</title>
+    </head>
+
+    <body>
+        <header th:replace="layout :: site-header"></header>
+
+        <div class="container">
+            <aside>
+                <h2>Recent Posts</h2>
+    
+                <a href="#" th:each="post : ${latest5posts}" th:text="${post.title}" th:href="@{/posts/view/{id}/(id=${post.id})}">Work Begins on HTML5.1</a>
+            </aside>
+    
+            <main id="posts">
+                <!-- for each post in the latest3posts from HomeController -->
+                <!-- That means this article will repeat 3 times -->
+                <article th:each="post : ${latest3posts}">
+                    <a href="#" th:href="@{/posts/view/{id}/(id=${post.id})}">
+                        <h2 class="title" th:text="${post.title}">Post Title</h2>
+                    </a>
+                    
+    
+                    <div class="date">
+                        <i>Posted on</i>
+    
+                        <!-- formats the post.date to a pattern. -->
+                        <!-- in this case, the desired pattern is 'dd-MMM-yyyy' -->
+                        <span th:text="${#dates.format(post.date, 'dd-MMM-yyyy')}">22-May-2016</span>
+    
+                        <!-- TODO: ano tong IF??? tsaka remove TAG?? -->
+                        <!-- baka ung if = if ung author is NOT NULL. saka lang siya irerender. -->
+                        <span th:if="${post.author}" th:remove="tag">
+                            <i>by</i>
+                            <span th:text="${post.author.fullName != null ? post.author.fullName : post.author.username}">Svetlin Nakov</span>
+                        </span>
+                    </div>
+    
+                    <p class="content text-justify" th:utext="${post.body}">Post content</p>
+                </article>
+            </main>
+        </div>
+        
+
+        <footer th:replace="layout :: site-footer"></footer>
+    </body>
+</html>

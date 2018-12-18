@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- sa layout.html, pakihanap yung may tag na site-head.. tapos pakilagay dito. tnx -->
+    <head th:replace="layout :: site-head">
+        <title th:text="${post.title}">View Post</title>
+    </head>
+
+    <body>
+        <header th:replace="layout :: site-header"></header>
+
+        <main id="posts">
+            <article>
+                <div>
+                    <span class="title h2" th:text="${post.title}">Post Title</span>
+
+                    <span sec:authorize="isAuthenticated()" th:if="${#authentication.name} == ${post.author.username}">
+                        <a href="#" th:href="@{/posts/edit/{id}/(id=${post.id})}" class="btn btn-info btn-sm">EDIT</a>
+
+                        <a href="#" role="button" data-toggle="modal" data-target="#deletePostModal" class="btn btn-danger btn-sm">DELETE</a>
+
+                        <div class="modal fade" id="deletePostModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            <span class="fa fa-trash"></span>
+                                            &nbsp; Confirm Delete
+                                        </h4> <!-- Confirm Delete Title -->
+                                    </div> <!-- Modal Header -->
+
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this post?</p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <a th:href="@{'/posts/delete/'+${post.id}}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- Modal -->
+                    </span>
+                </div>
+                
+
+                <!-- Check if current viewer is logged in -->
+                <div sec:authorize="isAuthenticated()">
+                    <div th:if="${#authentication.name} == ${post.author.username}">
+                        <span>hey 2!!</span>
+                    </div>
+                </div>
+
+                <div class="date">
+                    <i>Posted on</i>
+
+                    <span th:text="${#dates.format(post.date, 'dd-MMM-yyyy')}">22-May-2016</span>
+
+                    <span th:if="${post.author}" th:remove="tag">
+                        <i>by</i>
+
+                        <span th:text="${post.author.fullName != null ? post.author.fullName : post.author.username}">Svetlin Nako</span>
+
+                    </span>
+                </div>
+
+                <p class="content" th:utext="${post.body}">Post content</p>
+            </article>
+        </main>
+
+        <footer th:replace="layout :: site-footer"></footer>
+    </body>
+</html>

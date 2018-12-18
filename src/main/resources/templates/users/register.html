@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout::site-head">
+        <title>Register | Codegum Blog</title>
+    </head>
+
+    <body>
+        <!-- th:replace in ken words: -->
+        <!-- sa layout.html,  -->
+        <!-- yung may fragment na site-header dun,  -->
+        <!-- gawin mong kamukha nito. -->
+        <header th:replace="layout::site-header"></header>
+        
+        <h2>User's Registration</h2>
+
+        <div class="container row">
+            <!-- TODO: ano yung th:object="${user}"?  -->
+            <!-- ken words: iset iyong action nito sa URL mapping na /users/register. -->
+            <!-- yung Controller na naghahawak ng URL na to maghahandle nun. -->
+            <!-- In this case nasa LoginController siya. -->
+            <form action="#" th:action="@{/users/register}" th:object="${user}" method="POST" class="form col-md-5 col-md-offset-7">
+                <!-- Username field -->
+                <div class="form-group">
+                    <input type="text" th:field="*{username}" placeholder="User Name" th:class="${#fields.hasErrors('username') ? 'form-control is-invalid' : 'form-control'}" />
+
+                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <input type="password" th:field="*{passwordHash}" placeholder="Password" th:class="${#fields.hasErrors('passwordHash') ? 'form-control is-invalid' : 'form-control'}" />
+
+                    <div th:if="${#fields.hasErrors('passwordHash')}" th:errors="*{passwordHash}" class="invalid-feedback"></div>
+                </div>
+
+                <!-- Full name field -->
+                <div class="form-group">
+                    <input type="text" th:field="*{fullName}" placeholder="Full Name" th:class="${#fields.hasErrors('fullName') ? 'form-control is-invalid' : 'form-control'}" />
+
+                    <label th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="invalid-feedback"></label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group clearfix">
+                    <button type="submit" class="btn btn-primary float-right">Register User</button>
+                </div>
+
+                <div class="form-group">
+                    <div th:class="${successMessage} ? 'alert alert-success' : ''" th:text="${successMessage}"></div>
+                </div>
+            </form>
+        </div>
+
+        <footer th:replace="layout::site-footer"></footer>
+    </body>
+</html>
